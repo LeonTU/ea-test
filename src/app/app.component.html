@@ -1,4 +1,8 @@
-<div class="container d-flex justify-content-around mt-5">
+<div *ngIf="errorMessage" class="container mt-5">
+  <h1>{{errorMessage}}</h1>
+</div>
+
+<div *ngIf="!errorMessage" class="container d-flex justify-content-around mt-5">
   <div>
     <h3>Festival List</h3>
 

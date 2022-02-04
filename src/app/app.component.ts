@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   title = 'ea-test';
   recordLabelList: IRecordLabel[];
   festivalList: IFestivalDto[];
+  errorMessage: string = null;
 
   constructor(private festivalsService: FestivalsService) { }
 
@@ -24,7 +25,11 @@ export class AppComponent implements OnInit {
 
         console.log(this.festivalList);
         console.log(this.recordLabelList);
-      }, error => console.log(error)
+      },
+      (error: string) => {
+        this.errorMessage = error;
+        console.log(error);
+      }
     );
   }
 }

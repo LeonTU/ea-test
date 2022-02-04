@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IFestivalDto } from '../models/festivalDto';
 import { IBand, IRecordLabel, IRecordLabelList } from '../models/record';
@@ -19,6 +20,10 @@ export class FestivalsService {
   getRecordLabels() {
     return this.http.get<IFestivalDto[]>(this.baseUrl).pipe(
       map((response) => {
+        if (!response) {
+          throw ('We are getting empty result, please try again later.');
+        }
+
         this.festivalList = response;
         this.bandList = [];
         this.recordLabelList = {};
@@ -39,6 +44,10 @@ export class FestivalsService {
         return this.sortedRecordLabelList;
       })
     );
+  }
+
+  getFestivalList(): IFestivalDto[] {
+    return this.festivalList;
   }
 
   private updateBand(bandName: string, festivalName: string): IBand {
@@ -62,9 +71,5 @@ export class FestivalsService {
       name: key,
       bands: this.recordLabelList[key]
     }));
-  }
-
-  getFestivalList(): IFestivalDto[] {
-    return this.festivalList;
   }
 }
