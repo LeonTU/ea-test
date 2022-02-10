@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { IFestivalDto } from '../models/festivalDto';
 import { IBand, IRecordLabel, IRecordLabelList } from '../models/record';
 
@@ -9,7 +10,7 @@ import { IBand, IRecordLabel, IRecordLabelList } from '../models/record';
   providedIn: 'root'
 })
 export class FestivalsService {
-  baseUrl = '/codingtest/api/v1/festivals';
+  baseUrl = environment.festivalBaseUrl;
   bandList: IBand[];
   recordLabelList: IRecordLabelList;
   sortedRecordLabelList: IRecordLabel[];
@@ -17,11 +18,11 @@ export class FestivalsService {
 
   constructor(private http: HttpClient) { }
 
-  getRecordLabels() {
+  getRecordLabels(): Observable<IRecordLabel[]> {
     return this.http.get<IFestivalDto[]>(this.baseUrl).pipe(
       map((response) => {
         if (!response) {
-          throw ('We are getting empty result, please try again later.');
+          throw new Error('We are getting empty result, please try again later.');
         }
 
         this.festivalList = response;
@@ -51,21 +52,21 @@ export class FestivalsService {
   }
 
   private updateBand(bandName: string, festivalName: string): IBand {
-    let band = this.bandList.find(band => band.name === bandName);
+    let band = this.bandList.find(b => b.name === bandName);
 
     if (!band) {
       band = { name: bandName, festivals: [] };
+      this.bandList.push(band);
     }
 
     if (festivalName) {
       band.festivals.push(festivalName);
     }
 
-    this.bandList.push(band);
     return band;
   }
 
-  private sortRecordLabelList(recordLabelList: IRecordLabelList) {
+  private sortRecordLabelList(recordLabelList: IRecordLabelList): void {
     const keys = Object.keys(recordLabelList).sort();
     keys.forEach(key => this.sortedRecordLabelList.push({
       name: key,

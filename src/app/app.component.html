@@ -1,34 +1,3 @@
-<div *ngIf="errorMessage" class="container mt-5">
-  <h1>{{errorMessage}}</h1>
-</div>
-
-<div *ngIf="!errorMessage" class="container d-flex justify-content-around mt-5">
-  <div>
-    <h3>Festival List</h3>
-
-    <ul *ngFor="let festival of festivalList" class="list-group mt-3">Festival: {{festival.name ? festival.name : '(No
-      Festival)'}}
-      <li *ngFor="let band of festival.bands" class="list-group-item">
-        Band Name: {{band.name}}
-        <br>
-        Record Label: {{band.recordLabel ? band.recordLabel : '(No record label)'}}
-      </li>
-    </ul>
-  </div>
-
-  <div>
-    <h3>Record Label List</h3>
-
-    <ul *ngFor="let recordLabel of recordLabelList" class="list-group mt-3">Record Label: {{recordLabel.name}}
-      <li *ngFor="let band of recordLabel.bands" class="list-group-item">Band Name: {{band.name}}
-        <div *ngIf="band.festivals.length > 0; else noFestival">
-          <ul>
-            <li *ngFor="let festival of band.festivals">{{festival}}</li>
-          </ul>
-        </div>
-        <ng-template #noFestival>(No Festival)</ng-template>
-      </li>
-    </ul>
-  </div>
-
+<div class="mb-5">
+  <router-outlet></router-outlet>
 </div>

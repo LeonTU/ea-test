@@ -8,20 +8,20 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   constructor() { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler) {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error) => {
-        let errorMessage = '';
+        let errorMessage = 'There is something wrong, please try again later.';
         if (error.status === 429) {
           errorMessage = 'Too many requests, please try again later.';
-          return throwError(errorMessage);
+          return throwError(new Error(errorMessage));
         }
         if (error.status === 500) {
           errorMessage = 'Server errors, please try again later or contact the administrator.';
-          return throwError(errorMessage);
+          return throwError(new Error(errorMessage));
         }
 
-        return throwError(error);
+        return throwError(new Error(errorMessage));
       })
     );
   }
